@@ -6,7 +6,7 @@
   "scripts": {
     "prod": "cross-env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
-    "test": "cross-env NODE_ENV=test mocha test --require test/_setup.js",
+    "test": "cross-env NODE_ENV=test mocha \"test/**/*.js\" --require test/_setup.js",
     "format": "prettier --write *.js \"**/*.js\" \"test/**/*.js\"",
     "precommit": "npm run format && git diff --name-only --cached | xargs git add"
   },
