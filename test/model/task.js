@@ -10,7 +10,7 @@ describe("Model > Task", () => {
         id: 123,
         title: "Test task",
         description: "This is a sample task for testing",
-        isDone: false
+        isDone: false,
       });
     }).throws("Task is not constructable");
   });
@@ -19,14 +19,14 @@ describe("Model > Task", () => {
     const testData = Task.create({
       title: "Test task",
       description: "This is a sample task for testing",
-      isDone: false
+      isDone: false,
     });
 
     it("should throw an error when attempting to set the id", () => {
       expect(() => {
         testData.id = "some-id-value";
       }).throws("id cannot manually be set");
-    })
+    });
   });
 
   describe("Task.create", () => {
@@ -34,7 +34,7 @@ describe("Model > Task", () => {
       const fields = {
         title: "Test task",
         description: "This is a sample task for testing",
-        isDone: false
+        isDone: false,
       };
 
       const newTask = Task.create(fields);
@@ -49,7 +49,7 @@ describe("Model > Task", () => {
         id: "sample-id",
         title: "Test task",
         description: "This is a sample task for testing",
-        isDone: false
+        isDone: false,
       });
       expect(newTask.id).to.be.null;
     });
@@ -58,7 +58,7 @@ describe("Model > Task", () => {
       expect(() => {
         Task.create({
           description: "This is a sample task for testing",
-          isDone: false
+          isDone: false,
         });
       }).throws("title field is required");
     });
