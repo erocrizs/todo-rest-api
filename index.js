@@ -1,10 +1,14 @@
 require("module-alias/register");
 require("dotenv").config();
+const db = require("@src/db");
 const app = require("@src/app");
 
+const DB_JSON = process.env.DB_JSON || "todo.json";
 const PORT = process.env.PORT || 3000;
 
-const server = app.listen(PORT, () => {
+db.init(DB_JSON);
+
+const server = app.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
 });
 
