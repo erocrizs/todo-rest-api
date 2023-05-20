@@ -1,4 +1,4 @@
-const { JsonDB, Config } = require('node-json-db');
+const { JsonDB, Config } = require("node-json-db");
 
 let db = null;
 
@@ -7,8 +7,8 @@ const init = (filepath) => {
     throw new Error("Database has already been configured");
   }
 
-  db = new JsonDB(new Config(filepath, true, false, '/'));
-}
+  db = new JsonDB(new Config(filepath, true, false, "/"));
+};
 
 const get = () => {
   if (db) {
@@ -16,9 +16,9 @@ const get = () => {
   }
 
   throw new Error("Database has not been configured");
-}
+};
 
 module.exports = {
   get,
-  init
-}
+  init,
+};
