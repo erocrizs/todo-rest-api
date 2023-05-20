@@ -15,7 +15,7 @@ describe("Model > Task", () => {
 
   afterEach(() => {
     sandbox.restore();
-  })
+  });
 
   it("should not be constructable", () => {
     expect(() => {
@@ -88,7 +88,7 @@ describe("Model > Task", () => {
 
     beforeEach(() => {
       mockDbInstance = {
-        getData: sinon.stub()
+        getData: sinon.stub(),
       };
       sandbox.stub(db, "get").returns(mockDbInstance);
     });
@@ -114,19 +114,25 @@ describe("Model > Task", () => {
 
     it("should throw an error if the ID is not valid", async () => {
       mockDbInstance.getData.returns({});
-      expect(Task.findById("invalid-[id]-format")).to.be.rejectedWith("invalid id format");
+      expect(Task.findById("invalid-[id]-format")).to.be.rejectedWith(
+        "invalid id format"
+      );
     });
 
     it("should return null if the database returns empty", async () => {
       const testId = "59403f04-c01e-4ce6-be0a-de807ffd0b13";
-      mockDbInstance.getData.rejects(new DataError(`Can't find dataPath: ${testId}`));
+      mockDbInstance.getData.rejects(
+        new DataError(`Can't find dataPath: ${testId}`)
+      );
       const result = await Task.findById(testId);
       expect(result).to.be.null;
     });
 
     it("should throw unexpected error by the database", async () => {
       mockDbInstance.getData.rejects(new DataError("Unexpected error"));
-      expect(Task.findById("59403f04-c01e-4ce6-be0a-de807ffd0b13")).to.be.rejectedWith("Unexpected error");
+      expect(
+        Task.findById("59403f04-c01e-4ce6-be0a-de807ffd0b13")
+      ).to.be.rejectedWith("Unexpected error");
     });
   });
 });

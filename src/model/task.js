@@ -47,8 +47,7 @@ class Task {
     let task = null;
     try {
       task = await instance.getData(`/task/${id}`);
-    }
-    catch (error) {
+    } catch (error) {
       if (!error.message.match(/Can't find dataPath/)) {
         throw error;
       }
@@ -60,7 +59,7 @@ class Task {
 
     return Task.#createInternal({
       id,
-      ...task
+      ...task,
     });
   }
 }
