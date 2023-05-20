@@ -1,11 +1,8 @@
 require("module-alias/register");
 require("dotenv").config({ path: ".env.test" });
-const db = require("@src/db");
+require("./_db");
+const chai = require("chai");
 
-try {
-  db.init("");
-} catch (e) {
-  if (e.message !== "Database has already been configured") {
-    throw e;
-  }
-}
+chai.use(require("chai-http"));
+chai.use(require("sinon-chai"));
+chai.use(require("chai-as-promised"));

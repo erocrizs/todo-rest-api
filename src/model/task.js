@@ -1,8 +1,6 @@
 const _ = require("lodash");
 const db = require("@src/db");
 
-const instance = db.get();
-
 class Task {
   #id = null;
   static #isInternalConstructing = false;
@@ -38,6 +36,32 @@ class Task {
 
   set id(value) {
     throw new TypeError("id cannot manually be set");
+  }
+
+  static async findById(id) {
+    if (id.match(/[^0-9a-f-]/)) {
+      throw new TypeError("invalid id format");
+    }
+
+    const instance = db.get();
+    let task = null;
+    try {
+      task = await instance.getData(`/task/${id}`);
+    }
+    catch (error) {
+      if (!error.message.match(/Can't find dataPath/)) {
+        throw error;
+      }
+    }
+
+    if (_.isNil(task)) {
+      return null;
+    }
+
+    return Task.#createInternal({
+      id,
+      ...task
+    });
   }
 }
 
