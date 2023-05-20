@@ -6,9 +6,14 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "prettier --write \"src/**/*.js\"",
+    "test": "mocha test --require test/_setup.js",
+    "format": "prettier --write *.js \"**/*.js\" \"test/**/*.js\"",
     "precommit": "npm run format && git diff --name-only --cached | xargs git add"
+  },
+  "_moduleAliases": {
+    "@root": ".",
+    "@src": "src",
+    "@test": "test"
   },
   "repository": {
     "type": "git",
@@ -26,12 +31,14 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "lodash": "^4.17.21",
+    "module-alias": "^2.2.2",
     "morgan": "^1.10.0",
     "node-json-db": "^2.2.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
     "chai": "^4.3.7",
+    "chai-http": "^4.3.0",
     "husky": "^8.0.3",
     "mocha": "^10.2.0",
     "nodemon": "^2.0.22",
