@@ -2,11 +2,13 @@ const express = require("express");
 const morgan = require("morgan");
 const app = express();
 
-app.use(morgan("combined"));
+if (process.env.NODE_ENV === "production") {
+  app.use(morgan("combined"));
+}
 app.use(express.json());
 
-app.use("/test", (req, res, next) => {
-  res.status(200).send({ success: true });
+app.use("/ping", (req, res, next) => {
+  res.status(200).send({ pong: true });
 });
 
 // Error handling middleware

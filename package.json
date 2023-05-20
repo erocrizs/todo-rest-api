@@ -4,9 +4,9 @@
   "description": "a REST API server for a To Do list. Made with ExpressJS",
   "main": "src/index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "test": "mocha test --require test/_setup.js",
+    "prod": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "test": "cross-env NODE_ENV=test mocha test --require test/_setup.js",
     "format": "prettier --write *.js \"**/*.js\" \"test/**/*.js\"",
     "precommit": "npm run format && git diff --name-only --cached | xargs git add"
   },
@@ -28,6 +28,7 @@
   "dependencies": {
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "lodash": "^4.17.21",
