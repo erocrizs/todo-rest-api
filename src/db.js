@@ -7,7 +7,7 @@ const init = (filepath) => {
     throw new Error("Database has already been configured");
   }
 
-  db = new JsonDB(new Config(filepath, true, false, "/"));
+  db = new JsonDB(new Config(filepath, true, true, "/"));
 };
 
 const get = () => {

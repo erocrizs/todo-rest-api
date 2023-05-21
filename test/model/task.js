@@ -59,6 +59,42 @@ describe("Model > Task", () => {
     });
   });
 
+  describe(".save", () => {
+    let mockDbInstance;
+
+    beforeEach(() => {
+      mockDbInstance = {
+        getIndex: sinon.stub(),
+        push: sinon.stub(),
+      };
+      sandbox.stub(db, "get").returns(mockDbInstance);
+    });
+
+    it("should insert to the database if the task has no ID", async () => {
+      mockDbInstance.getIndex.resolves(-1);
+
+      const newTask = Task.create({
+        title: "Test task",
+        description: "This is a sample task for testing",
+        isDone: false,
+      });
+
+      await newTask.save();
+
+      expect(newTask.id).to.be.a("string");
+      expect(mockDbInstance.push).to.have.been.calledWithExactly(
+        "/task[]",
+        {
+          id: newTask.id,
+          title: "Test task",
+          description: "This is a sample task for testing",
+          isDone: false,
+        },
+        true
+      );
+    });
+  });
+
   describe("Task.create()", () => {
     it("should create a new Task instance", () => {
       const fields = {
@@ -256,6 +292,30 @@ describe("Model > Task", () => {
         mockData[1],
         mockData[3],
       ]);
+    });
+  });
+
+  describe("Task.isExistingId()", () => {
+    const testId = "59403f04-c01e-4ce6-be0a-de807ffd0b13";
+    let mockDbInstance;
+
+    beforeEach(() => {
+      mockDbInstance = {
+        getIndex: sinon.stub(),
+      };
+      sandbox.stub(db, "get").returns(mockDbInstance);
+    });
+
+    it("should return false if the database cannot find the ID", async () => {
+      mockDbInstance.getIndex.returns(-1);
+      const isExisting = await Task.isExistingId(testId);
+      expect(isExisting).to.be.false;
+    });
+
+    it("should return true if the database finds the ID", async () => {
+      mockDbInstance.getIndex.returns(4);
+      const isExisting = await Task.isExistingId(testId);
+      expect(isExisting).to.be.true;
     });
   });
 });
