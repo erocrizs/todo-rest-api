@@ -83,7 +83,7 @@ class Task {
     if (tasks.length <= firstItemIndex) {
       return [];
     }
-    const getResult = tasks.splice(firstItemIndex, count);
+    const getResult = _.slice(tasks, firstItemIndex, firstItemIndex + count);
     return getResult.map((t) => Task.#createInternal(t));
   }
 }

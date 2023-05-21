@@ -167,10 +167,10 @@ describe("Controller > Task > List", () => {
           filter: {
             title: "title",
             description: "desc",
-            isDone: true,
+            isDone: "true",
           },
-          page: 5,
-          count: 5,
+          page: "5",
+          count: "5",
         },
       };
       const res = {};

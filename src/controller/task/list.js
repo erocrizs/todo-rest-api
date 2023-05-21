@@ -3,8 +3,13 @@ const { validate, Joi } = require("express-validation");
 const Task = require("@src/model/task");
 
 async function handler(req, res) {
-  const page = req.query.page || 1;
-  const count = req.query.count || 5;
+  const page = +req.query.page || 1;
+  const count = +req.query.count || 5;
+
+  if (!_.isNil(req.query.filter?.isDone)) {
+    req.query.filter.isDone = req.query.filter.isDone === "true";
+  }
+
   const tasks = await Task.list({
     filter: req.query.filter || {},
     page: page - 1,

@@ -34,7 +34,7 @@
       "id": "1f361bd2-b5d4-4e44-b792-c2a9f9e529c7",
       "title": "Go grocery shopping",
       "description": "Purchase groceries and household essentials",
-      "isDone": false
+      "isDone": true
     }
   ]
 }
