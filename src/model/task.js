@@ -38,6 +38,15 @@ class Task {
     throw new TypeError("id cannot manually be set");
   }
 
+  json() {
+    return {
+      id: this.#id || null,
+      title: this.title,
+      description: this.description,
+      isDone: this.isDone,
+    };
+  }
+
   static async findById(id) {
     if (id.match(/[^0-9a-f-]/)) {
       throw new TypeError("invalid id format");

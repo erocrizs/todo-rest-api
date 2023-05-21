@@ -42,7 +42,24 @@ describe("Model > Task", () => {
     });
   });
 
-  describe("Task.create", () => {
+  describe(".json()", () => {
+    const testData = Task.create({
+      title: "Test task",
+      description: "This is a sample task for testing",
+      isDone: false,
+    });
+
+    it("should return a plain object with the relevant fields", () => {
+      expect(testData.json()).to.deep.equal({
+        id: null,
+        title: "Test task",
+        description: "This is a sample task for testing",
+        isDone: false,
+      });
+    });
+  });
+
+  describe("Task.create()", () => {
     it("should create a new Task instance", () => {
       const fields = {
         title: "Test task",
@@ -83,7 +100,7 @@ describe("Model > Task", () => {
     });
   });
 
-  describe("Task.findById", () => {
+  describe("Task.findById()", () => {
     let mockDbInstance;
 
     beforeEach(() => {
