@@ -54,13 +54,11 @@ class Task {
 
     const instance = db.get();
     let task = null;
-    try {
-      task = await instance.getData(`/task/${id}`);
-    } catch (error) {
-      if (!error.message.match(/Can't find dataPath/)) {
-        throw error;
-      }
+    const taskIndex = await instance.getIndex("/task", id);
+    if (taskIndex === -1) {
+      return null;
     }
+    task = await instance.getData(`/task[${taskIndex}]`);
 
     if (_.isNil(task)) {
       return null;
@@ -70,6 +68,23 @@ class Task {
       id,
       ...task,
     });
+  }
+
+  static async list({ page = 0, count = 5, filter = {} } = {}) {
+    const instance = db.get();
+    let tasks = await instance.getData("/task");
+
+    const validatedFilter = _.pick(filter, ["title", "description", "isDone"]);
+    if (!_.isEmpty(validatedFilter)) {
+      tasks = _.filter(tasks, validatedFilter);
+    }
+
+    const firstItemIndex = page * count;
+    if (tasks.length <= firstItemIndex) {
+      return [];
+    }
+    const getResult = _.slice(tasks, firstItemIndex, firstItemIndex + count);
+    return getResult.map((t) => Task.#createInternal(t));
   }
 }
 
