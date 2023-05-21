@@ -69,6 +69,17 @@ class Task {
       ...task,
     });
   }
+
+  static async list({ page = 0, count = 5 } = {}) {
+    const instance = db.get();
+    const tasks = await instance.getData("/task");
+    const firstItemIndex = page * count;
+    if (tasks.length <= firstItemIndex) {
+      return [];
+    }
+    const getResult = tasks.splice(firstItemIndex, count);
+    return getResult.map((t) => Task.#createInternal(t));
+  }
 }
 
 module.exports = Task;
