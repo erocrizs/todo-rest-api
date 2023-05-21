@@ -243,12 +243,19 @@ describe("Model > Task", () => {
     });
 
     it("should filter the list of tasks", async () => {
-      const firstTaskList = await Task.list({filter: { title: "This title does not exist" }});
-      const secondTaskList = await Task.list({filter: { description: "Wash and fold the laundry" }});
-      const thirdTaskList = await Task.list({filter: { isDone: true }});
+      const firstTaskList = await Task.list({
+        filter: { title: "This title does not exist" },
+      });
+      const secondTaskList = await Task.list({
+        filter: { description: "Wash and fold the laundry" },
+      });
+      const thirdTaskList = await Task.list({ filter: { isDone: true } });
       expect(firstTaskList.map((t) => t.json())).to.deep.equal([]);
       expect(secondTaskList.map((t) => t.json())).to.deep.equal([mockData[2]]);
-      expect(thirdTaskList.map((t) => t.json())).to.deep.equal([mockData[1], mockData[3]]);
+      expect(thirdTaskList.map((t) => t.json())).to.deep.equal([
+        mockData[1],
+        mockData[3],
+      ]);
     });
   });
 });
