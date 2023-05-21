@@ -139,6 +139,59 @@ describe("Model > Task", () => {
     });
   });
 
+  describe(".delete", () => {
+    let mockDbInstance;
+
+    beforeEach(() => {
+      mockDbInstance = {
+        getIndex: sinon.stub(),
+        delete: sinon.stub(),
+      };
+      sandbox.stub(db, "get").returns(mockDbInstance);
+    });
+
+    it("should delete a task that exists in the database", async () => {
+      const testTask = Task.createForTest({
+        id: "dcbe3721-2143-4b63-bc88-176b8b6f08ce",
+        title: "Do laundry",
+        description: "Wash and fold the laundry",
+        isDone: false,
+      });
+      mockDbInstance.getIndex.resolves(4);
+      mockDbInstance.delete.resolves();
+      await testTask.delete();
+      expect(mockDbInstance.delete).to.have.been.calledWithExactly("/task[4]");
+      expect(testTask.id).to.be.null;
+    });
+
+    it("should throw an error if the id does not exist in the database", async () => {
+      const testTask = Task.createForTest({
+        id: "dcbe3721-2143-4b63-bc88-176b8b6f08ce",
+        title: "Do laundry",
+        description: "Wash and fold the laundry",
+        isDone: false,
+      });
+      mockDbInstance.getIndex.resolves(-1);
+      mockDbInstance.delete.resolves();
+      expect(testTask.delete()).to.be.rejectedWith("task not found");
+      expect(mockDbInstance.delete).to.not.have.been.called;
+    });
+
+    it("should throw an error if the task does not have an id", async () => {
+      const testTask = Task.create({
+        title: "Do laundry",
+        description: "Wash and fold the laundry",
+        isDone: false,
+      });
+      mockDbInstance.getIndex.resolves(4);
+      mockDbInstance.delete.resolves();
+      expect(testTask.delete()).to.be.rejectedWith(
+        "cannot delete a task with an empty ID"
+      );
+      expect(mockDbInstance.delete).to.not.have.been.called;
+    });
+  });
+
   describe("Task.create()", () => {
     it("should create a new Task instance", () => {
       const fields = {
