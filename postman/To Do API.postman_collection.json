@@ -1,0 +1,1259 @@
+{
+	"info": {
+		"_postman_id": "158ffd2c-8308-44cc-a926-fe353ae4bce7",
+		"name": "To Do API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5388552"
+	},
+	"item": [
+		{
+			"name": "GET /task/:id",
+			"item": [
+				{
+					"name": "happy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response body is the details of the task\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.eql(\"aa32c242-431f-4d9e-9823-4689e6cc6c21\");\r",
+									"    pm.expect(jsonData.title).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.description).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.isDone).to.be.a(\"boolean\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/task/aa32c242-431f-4d9e-9823-4689e6cc6c21",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task",
+								"aa32c242-431f-4d9e-9823-4689e6cc6c21"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "not exist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/task/41fbaa76-1ce0-4963-9395-b08faad0fce2",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task",
+								"41fbaa76-1ce0-4963-9395-b08faad0fce2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "invalid id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/task/invalid-id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task",
+								"invalid-id"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GET /task",
+			"item": [
+				{
+					"name": "happy page 1 - full page",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response body is the list of tasks\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.page).to.eql(1);\r",
+									"    pm.expect(jsonData.count).to.eql(4);\r",
+									"    pm.expect(jsonData.data).to.be.an(\"array\")\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/task?page=1&count=4",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "count",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "happy page 2 - partial page",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response body is the list of tasks\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.page).to.eql(2);\r",
+									"    pm.expect(jsonData.count).to.eql(4);\r",
+									"    pm.expect(jsonData.data).to.be.an(\"array\")\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/task?page=2&count=4",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2"
+								},
+								{
+									"key": "count",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "happy page 3 - empty page",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response body is the list of tasks\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.page).to.eql(3);\r",
+									"    pm.expect(jsonData.count).to.eql(4);\r",
+									"    pm.expect(jsonData.data).to.be.an(\"array\")\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/task?page=3&count=4",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "3"
+								},
+								{
+									"key": "count",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "happy title filter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response body is the list of tasks\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.page).to.eql(1);\r",
+									"    pm.expect(jsonData.count).to.eql(5);\r",
+									"    pm.expect(jsonData.data).to.be.an(\"array\")\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/task?filter[title]=Do laundry",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task"
+							],
+							"query": [
+								{
+									"key": "filter[title]",
+									"value": "Do laundry"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "happy description filter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response body is the list of tasks\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.page).to.eql(1);\r",
+									"    pm.expect(jsonData.count).to.eql(5);\r",
+									"    pm.expect(jsonData.data).to.be.an(\"array\")\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/task?filter[description]=Empty all the trash bins in the house",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task"
+							],
+							"query": [
+								{
+									"key": "filter[description]",
+									"value": "Empty all the trash bins in the house"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "happy isDone filter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response body is the list of tasks\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.page).to.eql(1);\r",
+									"    pm.expect(jsonData.count).to.eql(5);\r",
+									"    pm.expect(jsonData.data).to.be.an(\"array\")\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/task?filter[isDone]=true",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task"
+							],
+							"query": [
+								{
+									"key": "filter[isDone]",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "invalid isDone filter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/task?filter[isDone]=abcdefg",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task"
+							],
+							"query": [
+								{
+									"key": "filter[isDone]",
+									"value": "abcdefg"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "negative page",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/task?page=-100",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "-100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "negative count",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/task?count=-100",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task"
+							],
+							"query": [
+								{
+									"key": "count",
+									"value": "-100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "non-integer page",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/task?page=3.14",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "3.14"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "non-integer count",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/task?count=3.14",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task"
+							],
+							"query": [
+								{
+									"key": "count",
+									"value": "3.14"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "POST /task",
+			"item": [
+				{
+					"name": "happy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response body is the created task\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.title).to.eql(\"Test TODO\");\r",
+									"    pm.expect(jsonData.description).to.eql(\"Sample todo from POSTMAN\");\r",
+									"    pm.expect(jsonData.isDone).to.eql(false);\r",
+									"    pm.expect(jsonData.id).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"pm.collectionVariables.set(\"created_task_id\", pm.response.json().id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Test TODO\",\r\n    \"description\": \"Sample todo from POSTMAN\",\r\n    \"isDone\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/task",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "invalid title",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": 3.14,\r\n    \"description\": \"Sample todo from POSTMAN\",\r\n    \"isDone\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/task",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "invalid description",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Test TODO\",\r\n    \"description\": 3.14,\r\n    \"isDone\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/task",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "invalid isDone",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Test TODO\",\r\n    \"description\": \"Sample todo from POSTMAN\",\r\n    \"isDone\": 3.14\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/task",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "empty body",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/task",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PUT /task/:id",
+			"item": [
+				{
+					"name": "happy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response body is the updated task\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    var testTaskId = pm.collectionVariables.get(\"created_task_id\");\r",
+									"    pm.expect(jsonData.id).to.be.eql(testTaskId);\r",
+									"    pm.expect(jsonData.title).to.eql(\"Test TODO - Updated Together\");\r",
+									"    pm.expect(jsonData.description).to.eql(\r",
+									"        \"Sample todo from POSTMAN - Updated Together\"\r",
+									"    );\r",
+									"    pm.expect(jsonData.isDone).to.eql(true);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Test TODO - Updated Together\",\r\n    \"description\": \"Sample todo from POSTMAN - Updated Together\",\r\n    \"isDone\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/task/{{created_task_id}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task",
+								"{{created_task_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "happy - only title",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response body is the updated task\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    var testTaskId = pm.collectionVariables.get(\"created_task_id\");\r",
+									"    pm.expect(jsonData.id).to.be.eql(testTaskId);\r",
+									"    pm.expect(jsonData.title).to.eql(\r",
+									"        \"Test TODO - Updated Alone\"\r",
+									"    );\r",
+									"    pm.expect(jsonData.description).to.eql(\r",
+									"        \"Sample todo from POSTMAN - Updated Together\"\r",
+									"    );\r",
+									"    pm.expect(jsonData.isDone).to.eql(true);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Test TODO - Updated Alone\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/task/{{created_task_id}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task",
+								"{{created_task_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "happy - only description",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response body is the updated task\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    var testTaskId = pm.collectionVariables.get(\"created_task_id\");\r",
+									"    pm.expect(jsonData.id).to.be.eql(testTaskId);\r",
+									"    pm.expect(jsonData.title).to.eql(\r",
+									"        \"Test TODO - Updated Alone\"\r",
+									"    );\r",
+									"    pm.expect(jsonData.description).to.eql(\r",
+									"        \"Sample todo from POSTMAN - Updated Alone\"\r",
+									"    );\r",
+									"    pm.expect(jsonData.isDone).to.eql(true);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\": \"Sample todo from POSTMAN - Updated Alone\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/task/{{created_task_id}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task",
+								"{{created_task_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "happy - only isDone",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response body is the updated task\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    var testTaskId = pm.collectionVariables.get(\"created_task_id\");\r",
+									"    pm.expect(jsonData.id).to.be.eql(testTaskId);\r",
+									"    pm.expect(jsonData.title).to.eql(\r",
+									"        \"Test TODO - Updated Alone\"\r",
+									"    );\r",
+									"    pm.expect(jsonData.description).to.eql(\r",
+									"        \"Sample todo from POSTMAN - Updated Alone\"\r",
+									"    );\r",
+									"    pm.expect(jsonData.isDone).to.eql(false);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"isDone\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/task/{{created_task_id}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task",
+								"{{created_task_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "empty body",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/task/{{created_task_id}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task",
+								"{{created_task_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "invalid title",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": 3.14\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/task/{{created_task_id}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task",
+								"{{created_task_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "invalid description",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\": 3.14\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/task/{{created_task_id}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task",
+								"{{created_task_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "invalid isDone",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"isDone\": 3.14\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/task/{{created_task_id}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task",
+								"{{created_task_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DELETE /task/:id",
+			"item": [
+				{
+					"name": "happy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response body is the deleted task\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    var testTaskId = pm.collectionVariables.get(\"created_task_id\");\r",
+									"    pm.expect(jsonData.id).to.be.null;\r",
+									"    pm.expect(jsonData.title).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.description).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.isDone).to.be.a(\"boolean\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/task/{{created_task_id}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task",
+								"{{created_task_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "not exist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/task/c8a77d55-75e4-4a11-8f0d-17a55fe704a4",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"task",
+								"c8a77d55-75e4-4a11-8f0d-17a55fe704a4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "created_task_id",
+			"value": ""
+		}
+	]
+}
