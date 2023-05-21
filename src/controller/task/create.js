@@ -16,9 +16,7 @@ const validator = validate({
     title: Joi.string().required(),
     description: Joi.string(),
     isDone: Joi.boolean(),
-  })
-    .required()
-    .exist(),
+  }).required(),
 });
 
 module.exports = {
