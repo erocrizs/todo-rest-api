@@ -86,6 +86,16 @@ class Task {
     const getResult = _.slice(tasks, firstItemIndex, firstItemIndex + count);
     return getResult.map((t) => Task.#createInternal(t));
   }
+
+  static async isExistingId(id) {
+    if (id.match(/[^0-9a-f-]/)) {
+      throw new TypeError("invalid id format");
+    }
+
+    const instance = db.get();
+    const taskIndex = await instance.getIndex("/task", id);
+    return taskIndex >= 0;
+  }
 }
 
 module.exports = Task;

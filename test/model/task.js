@@ -258,4 +258,28 @@ describe("Model > Task", () => {
       ]);
     });
   });
+
+  describe("Task.isExistingId()", () => {
+    const testId = "59403f04-c01e-4ce6-be0a-de807ffd0b13";
+    let mockDbInstance;
+
+    beforeEach(() => {
+      mockDbInstance = {
+        getIndex: sinon.stub(),
+      };
+      sandbox.stub(db, "get").returns(mockDbInstance);
+    });
+
+    it("should return false if the database cannot find the ID", async () => {
+      mockDbInstance.getIndex.returns(-1);
+      const isExisting = await Task.isExistingId(testId);
+      expect(isExisting).to.be.false;
+    });
+
+    it("should return true if the database finds the ID", async () => {
+      mockDbInstance.getIndex.returns(4);
+      const isExisting = await Task.isExistingId(testId);
+      expect(isExisting).to.be.true;
+    });
+  });
 });
