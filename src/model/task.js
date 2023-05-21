@@ -54,13 +54,11 @@ class Task {
 
     const instance = db.get();
     let task = null;
-    try {
-      task = await instance.getData(`/task/${id}`);
-    } catch (error) {
-      if (!error.message.match(/Can't find dataPath/)) {
-        throw error;
-      }
+    const taskIndex = await instance.getIndex("/task", id);
+    if (taskIndex === -1) {
+      return null;
     }
+    task = await instance.getData(`/task[${taskIndex}]`);
 
     if (_.isNil(task)) {
       return null;

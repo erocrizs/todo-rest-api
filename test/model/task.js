@@ -105,6 +105,7 @@ describe("Model > Task", () => {
 
     beforeEach(() => {
       mockDbInstance = {
+        getIndex: sinon.stub(),
         getData: sinon.stub(),
       };
       sandbox.stub(db, "get").returns(mockDbInstance);
@@ -114,14 +115,15 @@ describe("Model > Task", () => {
       const testId = "59403f04-c01e-4ce6-be0a-de807ffd0b13";
 
       const mockResult = {
+        id: "59403f04-c01e-4ce6-be0a-de807ffd0b13",
         title: "Test task",
         description: "This is a sample task for testing",
         isDone: false,
       };
-      mockDbInstance.getData.returns(mockResult);
+      mockDbInstance.getIndex.returns(1);
+      mockDbInstance.getData.withArgs("/task[1]").returns(mockResult);
 
       const result = await Task.findById(testId);
-      expect(mockDbInstance.getData).to.have.been.calledWith(`/task/${testId}`);
       expect(result).instanceOf(Task);
       expect(result.id).to.equal(testId);
       expect(result.title).to.equal(mockResult.title);
@@ -130,19 +132,22 @@ describe("Model > Task", () => {
     });
 
     it("should throw an error if the ID is not valid", async () => {
-      mockDbInstance.getData.returns({});
+      mockDbInstance.getIndex.returns(1);
+      mockDbInstance.getData.rejects(new Error("should not be called"));
       expect(Task.findById("invalid-[id]-format")).to.be.rejectedWith(
         "invalid id format"
       );
+      expect(mockDbInstance.getData).to.have.not.been.called;
     });
 
     it("should return null if the database returns empty", async () => {
       const testId = "59403f04-c01e-4ce6-be0a-de807ffd0b13";
-      mockDbInstance.getData.rejects(
-        new DataError(`Can't find dataPath: ${testId}`)
-      );
+      mockDbInstance.getIndex.returns(-1);
+      mockDbInstance.getData.rejects(new Error("should not be called"));
       const result = await Task.findById(testId);
       expect(result).to.be.null;
+      expect(mockDbInstance.getIndex).to.have.been.called;
+      expect(mockDbInstance.getData).to.have.not.been.called;
     });
 
     it("should throw unexpected error by the database", async () => {
