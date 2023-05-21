@@ -164,38 +164,38 @@ describe("Model > Task", () => {
         id: "59403f04-c01e-4ce6-be0a-de807ffd0b13",
         title: "Buy catfood",
         description: "My cat likes wet catfood, avoid dry",
-        isDone: false
+        isDone: false,
       },
       {
         id: "d6c8e1a6-8e8f-45c7-92e2-589b2fb53211",
         title: "Take out the trash",
         description: "Empty all the trash bins in the house",
-        isDone: false
+        isDone: true,
       },
       {
         id: "dcbe3721-2143-4b63-bc88-176b8b6f08ce",
         title: "Do laundry",
         description: "Wash and fold the laundry",
-        isDone: false
+        isDone: false,
       },
       {
         id: "aa32c242-431f-4d9e-9823-4689e6cc6c21",
         title: "Clean the bathroom",
         description: "Scrub the toilet, sink, and bathtub",
-        isDone: false
+        isDone: true,
       },
       {
         id: "23bc329d-d437-4623-8d8c-d4c86a9f8a0a",
         title: "Pay bills",
         description: "Settle utility bills and other pending payments",
-        isDone: false
+        isDone: false,
       },
       {
         id: "1f361bd2-b5d4-4e44-b792-c2a9f9e529c7",
         title: "Go grocery shopping",
         description: "Purchase groceries and household essentials",
-        isDone: false
-      }
+        isDone: false,
+      },
     ];
     let mockDbInstance;
 
@@ -212,16 +212,16 @@ describe("Model > Task", () => {
       const thirdPageTasks = await Task.list({ page: 2, count: 4 });
       expect(firstPageTasks.length).to.equal(4);
       expect(firstPageTasks.every((t) => t instanceof Task)).to.equal(true);
-      expect(firstPageTasks.map(t => t.json())).to.deep.equal([
+      expect(firstPageTasks.map((t) => t.json())).to.deep.equal([
         mockData[0],
         mockData[1],
         mockData[2],
         mockData[3],
       ]);
-      
+
       expect(secondPageTasks.length).to.equal(2);
       expect(secondPageTasks.every((t) => t instanceof Task)).to.equal(true);
-      expect(secondPageTasks.map(t => t.json())).to.deep.equal([
+      expect(secondPageTasks.map((t) => t.json())).to.deep.equal([
         mockData[4],
         mockData[5],
       ]);
@@ -233,13 +233,22 @@ describe("Model > Task", () => {
       const tasks = await Task.list();
       expect(tasks.length).to.equal(5);
       expect(tasks.every((t) => t instanceof Task)).to.equal(true);
-      expect(tasks.map(t => t.json())).to.deep.equal([
+      expect(tasks.map((t) => t.json())).to.deep.equal([
         mockData[0],
         mockData[1],
         mockData[2],
         mockData[3],
-        mockData[4]
+        mockData[4],
       ]);
+    });
+
+    it("should filter the list of tasks", async () => {
+      const firstTaskList = await Task.list({filter: { title: "This title does not exist" }});
+      const secondTaskList = await Task.list({filter: { description: "Wash and fold the laundry" }});
+      const thirdTaskList = await Task.list({filter: { isDone: true }});
+      expect(firstTaskList.map((t) => t.json())).to.deep.equal([]);
+      expect(secondTaskList.map((t) => t.json())).to.deep.equal([mockData[2]]);
+      expect(thirdTaskList.map((t) => t.json())).to.deep.equal([mockData[1], mockData[3]]);
     });
   });
 });

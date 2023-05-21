@@ -10,7 +10,7 @@
       "id": "d6c8e1a6-8e8f-45c7-92e2-589b2fb53211",
       "title": "Take out the trash",
       "description": "Empty all the trash bins in the house",
-      "isDone": false
+      "isDone": true
     },
     {
       "id": "dcbe3721-2143-4b63-bc88-176b8b6f08ce",
@@ -22,7 +22,7 @@
       "id": "aa32c242-431f-4d9e-9823-4689e6cc6c21",
       "title": "Clean the bathroom",
       "description": "Scrub the toilet, sink, and bathtub",
-      "isDone": false
+      "isDone": true
     },
     {
       "id": "23bc329d-d437-4623-8d8c-d4c86a9f8a0a",

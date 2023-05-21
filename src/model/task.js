@@ -70,9 +70,15 @@ class Task {
     });
   }
 
-  static async list({ page = 0, count = 5 } = {}) {
+  static async list({ page = 0, count = 5, filter = {} } = {}) {
     const instance = db.get();
-    const tasks = await instance.getData("/task");
+    let tasks = await instance.getData("/task");
+
+    const validatedFilter = _.pick(filter, ["title", "description", "isDone"]);
+    if (!_.isEmpty(validatedFilter)) {
+      tasks = _.filter(tasks, validatedFilter);
+    }
+
     const firstItemIndex = page * count;
     if (tasks.length <= firstItemIndex) {
       return [];
