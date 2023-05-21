@@ -1,4 +1,5 @@
 const _ = require("lodash");
+const uuid = require("uuid");
 const db = require("@src/db");
 
 class Task {
@@ -45,6 +46,29 @@ class Task {
       description: this.description,
       isDone: this.isDone,
     };
+  }
+
+  async save() {
+    if (_.isNil(this.#id)) {
+      await this.#insertNew();
+      return;
+    }
+
+    // TODO update logic
+  }
+
+  async #insertNew() {
+    let id;
+
+    do {
+      id = uuid.v4();
+    } while (await Task.isExistingId(id));
+
+    const instance = db.get();
+    const payload = this.json();
+    payload.id = id;
+    await instance.push("/task[]", payload, true);
+    this.#id = id;
   }
 
   static async findById(id) {

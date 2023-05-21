@@ -59,6 +59,42 @@ describe("Model > Task", () => {
     });
   });
 
+  describe(".save", () => {
+    let mockDbInstance;
+
+    beforeEach(() => {
+      mockDbInstance = {
+        getIndex: sinon.stub(),
+        push: sinon.stub(),
+      };
+      sandbox.stub(db, "get").returns(mockDbInstance);
+    });
+
+    it("should insert to the database if the task has no ID", async () => {
+      mockDbInstance.getIndex.resolves(-1);
+
+      const newTask = Task.create({
+        title: "Test task",
+        description: "This is a sample task for testing",
+        isDone: false,
+      });
+
+      await newTask.save();
+
+      expect(newTask.id).to.be.a("string");
+      expect(mockDbInstance.push).to.have.been.calledWithExactly(
+        "/task[]",
+        {
+          id: newTask.id,
+          title: "Test task",
+          description: "This is a sample task for testing",
+          isDone: false,
+        },
+        true
+      );
+    });
+  });
+
   describe("Task.create()", () => {
     it("should create a new Task instance", () => {
       const fields = {
