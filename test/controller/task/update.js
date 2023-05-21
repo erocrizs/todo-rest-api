@@ -6,7 +6,7 @@ const { ValidationError } = require("express-validation");
 
 const expect = chai.expect;
 
-describe("Controller > Task > Get By ID", () => {
+describe("Controller > Task > Update", () => {
   let sandbox;
 
   beforeEach(() => {
