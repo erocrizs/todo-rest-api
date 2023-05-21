@@ -57,6 +57,22 @@ class Task {
     await this.#update();
   }
 
+  async delete() {
+    if (_.isNil(this.#id)) {
+      throw TypeError("cannot delete a task with an empty ID");
+    }
+
+    const instance = db.get();
+    const taskIndex = await instance.getIndex("/task", this.#id);
+
+    if (taskIndex === -1) {
+      throw TypeError("task not found");
+    }
+
+    await instance.delete(`/task[${taskIndex}]`);
+    this.#id = null;
+  }
+
   async #insertNew() {
     let id;
 

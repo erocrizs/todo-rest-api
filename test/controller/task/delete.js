@@ -1,0 +1,55 @@
+const chai = require("chai");
+const sinon = require("sinon");
+const middlewares = require("@src/controller/task/delete");
+const Task = require("@src/model/task");
+
+const expect = chai.expect;
+
+describe("Controller > Task > Update", () => {
+  let sandbox;
+
+  beforeEach(() => {
+    sandbox = sinon.createSandbox();
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  describe(".handler", () => {
+    it("should respond with 200 and a JSON object of the deleted task", async () => {
+      const id = "23bc329d-d437-4623-8d8c-d4c86a9f8a0a";
+      const mockTask = Task.createForTest({
+        id,
+        title: "Pay bills",
+        description: "Settle utility bills and other pending payments",
+        isDone: false,
+      });
+      sandbox.stub(Task, "findById").resolves(mockTask);
+      sandbox.stub(mockTask, "delete").resolves();
+
+      const req = { params: { id } };
+      const res = {};
+      res.status = sandbox.stub().returns(res);
+      res.send = sandbox.stub().returns(res);
+      await middlewares.handler(req, res);
+
+      expect(mockTask.delete).to.have.been.calledWithExactly();
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.send).to.have.been.calledWith(mockTask.json());
+    });
+
+    it("should respond with 404 and an error message if the task cannot be found", async () => {
+      const id = "23bc329d-d437-4623-8d8c-d4c86a9f8a0a";
+      sandbox.stub(Task, "findById").resolves(null);
+      const req = { params: { id } };
+      const res = {};
+      res.status = sandbox.stub().returns(res);
+      res.send = sandbox.stub().returns(res);
+      await middlewares.handler(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.send).to.have.been.calledWith({ error: "Not found" });
+    });
+  });
+});
