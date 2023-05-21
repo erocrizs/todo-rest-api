@@ -36,7 +36,7 @@ describe("Controller > Task > Get By ID", () => {
       expect(res.status).to.have.been.calledWith(200);
       expect(res.send).to.have.been.calledWith(mockTaskJson);
     });
-    
+
     it("should respond with 404 and an error message if the task cannot be found", async () => {
       const id = "23bc329d-d437-4623-8d8c-d4c86a9f8a0a";
       sandbox.stub(Task, "findById").resolves(null);
