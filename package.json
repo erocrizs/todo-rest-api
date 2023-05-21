@@ -4,9 +4,9 @@
   "description": "a REST API server for a To Do list. Made with ExpressJS",
   "main": "src/index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "test": "mocha test --require test/_setup.js",
+    "prod": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "test": "cross-env NODE_ENV=test mocha \"test/**/*.js\" --require test/_setup.js",
     "format": "prettier --write *.js \"**/*.js\" \"test/**/*.js\"",
     "precommit": "npm run format && git diff --name-only --cached | xargs git add"
   },
@@ -28,8 +28,10 @@
   "dependencies": {
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-validation": "^4.1.0",
     "lodash": "^4.17.21",
     "module-alias": "^2.2.2",
     "morgan": "^1.10.0",
@@ -38,12 +40,14 @@
   },
   "devDependencies": {
     "chai": "^4.3.7",
+    "chai-as-promised": "^7.1.1",
     "chai-http": "^4.3.0",
     "husky": "^8.0.3",
     "mocha": "^10.2.0",
     "nodemon": "^2.0.22",
     "prettier": "^2.8.8",
-    "sinon": "^15.1.0"
+    "sinon": "^15.1.0",
+    "sinon-chai": "^3.7.0"
   },
   "husky": {
     "hooks": {
