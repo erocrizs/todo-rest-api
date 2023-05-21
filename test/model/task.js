@@ -93,6 +93,50 @@ describe("Model > Task", () => {
         true
       );
     });
+
+    it("should update the database if the task already has an ID and is in the database", async () => {
+      mockDbInstance.getIndex.resolves(4);
+      const existingTask = Task.createForTest({
+        id: "dcbe3721-2143-4b63-bc88-176b8b6f08ce",
+        title: "Do laundry",
+        description: "Wash and fold the laundry",
+        isDone: false,
+      });
+
+      await existingTask.save();
+      expect(mockDbInstance.push).to.have.been.calledWithExactly(
+        "/task[4]",
+        {
+          id: "dcbe3721-2143-4b63-bc88-176b8b6f08ce",
+          title: "Do laundry",
+          description: "Wash and fold the laundry",
+          isDone: false,
+        },
+        true
+      );
+    });
+
+    it("should insert to the database if the task already has an ID but is not in the database", async () => {
+      mockDbInstance.getIndex.resolves(-1);
+      const existingTask = Task.createForTest({
+        id: "dcbe3721-2143-4b63-bc88-176b8b6f08ce",
+        title: "Do laundry",
+        description: "Wash and fold the laundry",
+        isDone: false,
+      });
+
+      await existingTask.save();
+      expect(mockDbInstance.push).to.have.been.calledWithExactly(
+        "/task[]",
+        {
+          id: "dcbe3721-2143-4b63-bc88-176b8b6f08ce",
+          title: "Do laundry",
+          description: "Wash and fold the laundry",
+          isDone: false,
+        },
+        true
+      );
+    });
   });
 
   describe("Task.create()", () => {
@@ -133,6 +177,39 @@ describe("Model > Task", () => {
       const newTask = Task.create({ title: "Test task" });
       expect(newTask.description).to.be.null;
       expect(newTask.isDone).to.equal(false);
+    });
+  });
+
+  describe("Task.createForTest()", () => {
+    it("should create a new Task instance", () => {
+      const fields = {
+        id: "sample-id",
+        title: "Test task",
+        description: "This is a sample task for testing",
+        isDone: false,
+      };
+
+      const testTask = Task.createForTest(fields);
+      expect(testTask).instanceOf(Task);
+      expect(testTask.id).to.equal(fields.id);
+      expect(testTask.title).to.equal(fields.title);
+      expect(testTask.description).to.equal(fields.description);
+      expect(testTask.isDone).to.equal(fields.isDone);
+    });
+
+    it("should throw an error when used outside of test environment", () => {
+      const fields = {
+        id: "sample-id",
+        title: "Test task",
+        description: "This is a sample task for testing",
+        isDone: false,
+      };
+
+      const envStub = sandbox.stub(process.env, "NODE_ENV").value("production");
+      expect(() => Task.createForTest(fields)).to.throw(
+        "not usable in non-test environment"
+      );
+      envStub.restore();
     });
   });
 

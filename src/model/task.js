@@ -54,7 +54,7 @@ class Task {
       return;
     }
 
-    // TODO update logic
+    await this.#update();
   }
 
   async #insertNew() {
@@ -69,6 +69,18 @@ class Task {
     payload.id = id;
     await instance.push("/task[]", payload, true);
     this.#id = id;
+  }
+
+  async #update() {
+    const payload = this.json();
+    const instance = db.get();
+    const taskIndex = await instance.getIndex("/task", this.#id);
+
+    if (taskIndex === -1) {
+      await instance.push("/task[]", payload, true);
+    }
+
+    await instance.push(`/task[${taskIndex}]`, payload, true);
   }
 
   static async findById(id) {
@@ -119,6 +131,14 @@ class Task {
     const instance = db.get();
     const taskIndex = await instance.getIndex("/task", id);
     return taskIndex >= 0;
+  }
+
+  static createForTest({ id, title, description, isDone }) {
+    if (process.env.NODE_ENV !== "test") {
+      throw new Error("not usable in non-test environment");
+    }
+
+    return Task.#createInternal({ id, title, description, isDone });
   }
 }
 
